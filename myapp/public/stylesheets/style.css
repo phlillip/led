@@ -1,0 +1,34 @@
+*{box-sizing: border-box;}
+body {
+font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+header{
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	background: #00B7FF;
+	color: white;
+	padding: 1em;
+}
+header .title{
+	font-weight: bold;
+}
+header a{
+	display: inline-block;
+	color: white;
+}
+a {
+  color: #00B7FF;
+}
+a.btn{
+	display: inline-block;
+	border: 1px solid;
+	margin: 0 1em 0 0;
+	padding: 1em;
+}
+a.btn:hover{
+	background: #00B7FF;
+	color: white;
+}
+label{display: block;}
