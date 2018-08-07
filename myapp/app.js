@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var hbs = require('express-handlebars');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -10,8 +11,9 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 // view engine setup
+app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout'}));
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -35,6 +37,7 @@ var config = {
   storageBucket: "",
   messagingSenderId: "838187907280"
 };
+
 firebase.initializeApp(config);
 
 // setup arduino for connection using johnny-five
@@ -62,24 +65,6 @@ board.on("ready", function(){
 	console.log("board is ready");
 });
 
-// app.get requests on /on triggers turning LED on
-app.get('/on', function(req, res){
-	console.log('LED on');
-	if(board.isReady){
-		led.on();
-	};
-	res.redirect('/');
-});
-
-// app.get requests on /off triggers turning LED off
-app.get('/off', function(req, res){
-	console.log('LED off');
-	if(board.isReady){
-		led.off();
-	};	
-	res.redirect('/');
-});
-
 // app.get requests on /red triggers turning LED red
 app.get('/:food/:focus', function(req, res){
 	if(board.isReady){		
@@ -90,7 +75,7 @@ app.get('/:food/:focus', function(req, res){
 		    console.log('Growing BIG tomatoes');
 		    led.color({red: 0, blue: 0, green: 255});
 		    break;
-		  case 'sweetness':
+		  case 'flavour':
 		    console.log('Growing SWEET tomatoes');
 		    led.color({red: 0, blue: 255, green: 0});
 		    break;
@@ -108,9 +93,12 @@ app.get('/:food/:focus', function(req, res){
 		}
 		led.on();
 	};	
-	res.redirect('/');
 });
 
+// app.get requests on /connection loads new page
+app.get('/connection', function(req, res){
+res.sendFile(path.join(__dirname + '/views/connection.html'));
+});
 
 
 
