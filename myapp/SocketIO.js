@@ -67,19 +67,25 @@ class SocketIO {
     return function(payload) {
       console.log(payload);
       socket.broadcast.emit('hardware', payload);
+      if(payload.type === 'led')this.triggerLED();
+
 
       // used for presentation purposes - cheesy but fun
-      if (keyboardActive && payload.type === 'morsecode'){
-        if (payload.letter === '.') {
-          robot.keyTap('right');
-          console.log('right');
-        }
-        if (payload.letter === '-') {
-          robot.keyTap('left');
-          console.log('left');
-        }
-      }
+      // if (keyboardActive && payload.type === 'morsecode'){
+      //   if (payload.letter === '.') {
+      //     robot.keyTap('right');
+      //     console.log('right');
+      //   }
+      //   if (payload.letter === '-') {
+      //     robot.keyTap('left');
+      //     console.log('left');
+      //   }
+      // }
     }
+  }
+
+  triggerLED (){
+
   }
 
   /**
