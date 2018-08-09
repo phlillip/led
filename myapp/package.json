@@ -9,11 +9,6 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
-<<<<<<< HEAD
-    "express-handlebars": "^3.0.0",
-=======
-    "fcm-node": "^1.2.1",
->>>>>>> 5e947b9bcfde62b35e71c1d25d24f3c9b6fd5d76
     "firebase": "^5.3.1",
     "firebase-admin": "^5.13.1",
     "firebase-messaging": "^1.0.6",
@@ -24,7 +19,8 @@
     "morgan": "~1.9.0",
     "pubnub": "^4.21.2",
     "robotjs": "^0.5.1",
-    "shortid": "^2.2.12"
+    "shortid": "^2.2.12",
+    "socket.io": "^2.1.1"
   },
   "description": "led prototype",
   "main": "app.js",
