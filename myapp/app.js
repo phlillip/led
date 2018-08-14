@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var socket = require('./SocketIO');
+//var socket = require('./SocketIO');
 
 
 
@@ -26,24 +26,9 @@ app.locals.basedir = path.join(__dirname, 'public');
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-// setup firebase access
-var firebase = require("firebase");
-
-// Initialize Firebase
-var config = {
-  apiKey: "AIzaSyAFikaCMhlHKuowqp-84gTxay5Ki96D7V4",
-  authDomain: "plantnation-47.firebaseapp.com",
-  databaseURL: "https://plantnation-47.firebaseio.com",
-  projectId: "plantnation-47",
-  storageBucket: "",
-  messagingSenderId: "838187907280"
-};
-
-firebase.initializeApp(config);
-
 // setup arduino for connection using johnny-five
 var five = require('johnny-five'),board,led;
-board = new five.Board({port: "/dev/cu.usbmodem1411"});
+board = new five.Board({});//port: "/dev/cu.usbmodem1411"
 board.on("ready", function(){
 
 	// Initialize the RGB LED
@@ -66,7 +51,10 @@ board.on("ready", function(){
 	console.log("board is ready");
 });
 
-// app.get requests on /red triggers turning LED red
+
+
+
+// set light colour
 app.get('/:food/:focus', function(req, res){
 	if(board.isReady){		
 		console.log(req.params);
@@ -96,10 +84,7 @@ app.get('/:food/:focus', function(req, res){
 	};	
 });
 
-// app.get requests on /connection loads new page
-app.get('/connection', function(req, res){
-res.sendFile(path.join(__dirname + '/views/connection.html'));
-});
+
 
 
 

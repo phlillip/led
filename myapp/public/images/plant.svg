@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="plant" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1024 1024" style="enable-background:new 0 0 1024 1024;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#3A3A3C;}
+</style>
+<rect id="trunk" x="496" y="423.7" class="st0" width="32" height="280"/>
+<path id="head" class="st0" d="M512,88.2c-110.5,0-200,89.5-200,200s89.5,200,200,200c110.5,0,200-89.5,200-200S622.5,88.2,512,88.2
+	z M512,352.2c-35.3,0-64-28.7-64-64s28.7-64,64-64c35.3,0,64,28.7,64,64S547.3,352.2,512,352.2z"/>
+<polygon id="roots" class="st0" points="649,699.8 512,935.8 375,699.8 "/>
+<path id="weight" class="st0" d="M480,617.4H97.7c-1.4,8.5-8.8,15-17.7,15s-16.3-6.5-17.7-15H62v-6h0.3c1.4-8.5,8.8-15,17.7-15
+	s16.3,6.5,17.7,15H480V617.4z M961.7,611.4c-1.4-8.5-8.8-15-17.7-15s-16.3,6.5-17.7,15H544v6h382.3c1.4,8.5,8.8,15,17.7,15
+	s16.3-6.5,17.7-15h0.3v-6H961.7z"/>
+</svg>

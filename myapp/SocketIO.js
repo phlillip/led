@@ -85,7 +85,7 @@ class SocketIO {
   }
 
   triggerLED (){
-
+    console.log("PHILLIP");
   }
 
   /**
