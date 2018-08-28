@@ -10,6 +10,8 @@ const robot = require("robotjs")
 const os = require('os')
 const ifaces = os.networkInterfaces()
 
+const JohnnyFive = require('./JohnnyFive')
+
 let keyboardActive = false
 
 class SocketIO {
@@ -70,13 +72,12 @@ class SocketIO {
     return function(payload) {
       console.log(payload);
       socket.broadcast.emit('hardware', payload);
-      if(payload.type === 'led') self.triggerLED();
+
+      if(payload.type === 'light-on') JohnnyFive.lightOn()
+      if(payload.type === 'light-off') JohnnyFive.lightOff()
+      if(payload.type === 'water-on') JohnnyFive.waterOn(payload.duration)
 
     }
-  }
-
-  triggerLED (){
-    console.log("PHILLIP");
   }
 
   /**

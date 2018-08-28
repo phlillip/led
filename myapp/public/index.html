@@ -18,7 +18,9 @@
  	<body>
  		<h1>How to control the world!</h1>
     <input id="ip" type="text" value="192.168.0.102:3000" /><input id="connect" type="button" value="Connect" /><br />
- 		<input id="control" type="button" value="Control World" />
+ 		<input id="light-on" type="button" value="Light On" />
+    <input id="light-off" type="button" value="Light Off" />
+    <input id="water-on" type="button" value="Water On" />
 
     <script>
     /* TODO: Read up on: */
@@ -31,19 +33,28 @@
       // get the UI elements
       let connectButton = document.getElementById('connect')
       let ipInput = document.getElementById('ip')
-      let controlButton = document.getElementById('control')
 
       connectButton.addEventListener('click', function(){
-
         let ip = ipInput.value
         socket = io(ip)
-
       })
 
-      controlButton.addEventListener('click', function(){
-        socket.emit('hardware', {msg: 'boom', type: 'led'});
+      // actions
+      let lightOnButton = document.getElementById('light-on')
+      let lightOffButton = document.getElementById('light-off')
+      let waterOnButton = document.getElementById('water-on')
+
+      lightOnButton.addEventListener('click', function(){
+        socket.emit('hardware', {type: 'light-on'});
       })
 
+      lightOffButton.addEventListener('click', function(){
+        socket.emit('hardware', {type: 'light-off'});
+      })
+
+      waterOnButton.addEventListener('click', function(){
+        socket.emit('hardware', {type: 'water-on', duration: 10});
+      })
 
     })(window, document);
 
