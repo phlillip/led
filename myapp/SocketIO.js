@@ -64,23 +64,14 @@ class SocketIO {
    * @param  {Object} socket event info
    */
   onHardware (socket) {
+
+    let self = this
+
     return function(payload) {
       console.log(payload);
       socket.broadcast.emit('hardware', payload);
-      if(payload.type === 'led')this.triggerLED();
+      if(payload.type === 'led') self.triggerLED();
 
-
-      // used for presentation purposes - cheesy but fun
-      // if (keyboardActive && payload.type === 'morsecode'){
-      //   if (payload.letter === '.') {
-      //     robot.keyTap('right');
-      //     console.log('right');
-      //   }
-      //   if (payload.letter === '-') {
-      //     robot.keyTap('left');
-      //     console.log('left');
-      //   }
-      // }
     }
   }
 
