@@ -14,7 +14,7 @@ res.sendFile(path.join(__dirname + '/views/connection.html'));
 });
 
 // app.get requests on /connection loads new page
-router.get('../views/recipes', function(req, res){
+router.get('/recipes', function(req, res){
 res.sendFile(path.join(__dirname + '/views/recipes.html'));
 });
 
