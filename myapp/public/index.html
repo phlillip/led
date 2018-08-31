@@ -18,8 +18,9 @@
         <!--<input id="ip" type="text" value="192.168.0" /> -->
         <!--<input id="ip" type="text" value="192.168.0.24" /> HOME -->
         <!--<input id="ip" type="text" value="86.159.150.200" /><!-- WORK machine FAILS -->
+        <input id="ip" type="text" value="192.168.1.71" /><!-- WORK machine FAILS -->
         <!--<input id="ip" type="text" value="192.168.1.254" /><!-- WORK router FAILS -->
-        <input id="ip" type="text" /><!-- left blank WORKS -->
+        <!--<input id="ip" type="text" /><!-- left blank WORKS -->
         <input id="connect" class="btn" type="button" value="Connect" />
       </div>
       <div class="">
@@ -83,9 +84,29 @@
     let ipInput = document.getElementById('ip')
 
     connectButton.addEventListener('click', function(){
-      let ip = ipInput.value + port
-      console.log(ip)
-      socket = io(ip)
+
+      //get internal ip automatically
+
+      window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;   //compatibility for firefox and chrome
+      var pc = new RTCPeerConnection({iceServers:[]}), noop = function(){};
+      pc.createDataChannel("");    //create a bogus data channel
+      pc.createOffer(pc.setLocalDescription.bind(pc), noop);    // create offer and set local description
+      pc.onicecandidate = function(ice){  //listen for candidate events
+          if(!ice || !ice.candidate || !ice.candidate.candidate)  return;
+          var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+          //console.log('my IP: ', myIP);
+          pc.onicecandidate = noop;
+
+          let ip = myIP + port
+          console.log(ip)
+          socket = io(ip)
+
+          //let ip = ipInput.value + port
+          //console.log(ip)
+          //socket = io(ip)
+
+      };
+
     })
 
     // actions
