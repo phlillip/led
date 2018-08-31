@@ -1,63 +1,112 @@
-<!DOCTYPE html>
- <html>
- 	<head>
- 		<meta charset="utf-8">
- 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
- 		<title></title>
- 		<meta name="description" content=" " />
- 		<meta name="author" content=" " />
- 		<meta name="HandheldFriendly" content="true" />
- 		<meta name="MobileOptimized" content="320" />
- 		<!-- Use maximum-scale and user-scalable at your own risk. It disables pinch/zoom. Think about usability/accessibility before including.-->
- 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
- 		<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
- 		<link rel="stylesheet" type="text/css" href=" ">
+<html>
+<head>
+  <title>PlantNation</title>
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <link href="/stylesheets/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js" ></script>
+</head>
+<body>
+  <div class="page status">
+  <header>
+    <span><img src="/images/ruuts.svg" /> | PlantStatus</span>
+  <a href="menu"><span class="fas fa-bars"></span></a>
+</header>
+  <div class="content">
+    <div class="content-header">
+      <div class="">
+        <!--<input id="ip" type="text" value="192.168.0" /> -->
+        <!--<input id="ip" type="text" value="192.168.0.24" /> HOME -->
+        <!--<input id="ip" type="text" value="86.159.150.200" /><!-- WORK machine FAILS -->
+        <!--<input id="ip" type="text" value="192.168.1.254" /><!-- WORK router FAILS -->
+        <input id="ip" type="text" /><!-- left blank WORKS -->
+        <input id="connect" class="btn" type="button" value="Connect" />
+      </div>
+      <div class="">
+        <input id="light-on" class="btn" type="button" value="Light On" />
+        <input id="light-off" class="btn" type="button" value="Light Off" />
+        <input id="water-on" class="btn" type="button" value="Water On" />
+      </div>
+    </div>
+<div class="content-content">
+  <div id="lightfade" class=""></div>
+  <div class="bars bar1 hidden"></div>
+    <div class="bars bar2 hidden"></div>
+    <div class="bars bar3 hidden"></div>
+    <div class="bars bar4 hidden"></div>
+  <div class="plant">
+    <svg id="plant" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+   viewBox="0 0 1024 1024">
+<rect id="trunk" x="496" y="423.7" class="st0" width="32" height="280"/>
+<path id="head" class="st0" d="M512,88.2c-110.5,0-200,89.5-200,200s89.5,200,200,200c110.5,0,200-89.5,200-200S622.5,88.2,512,88.2
+  z M512,352.2c-35.3,0-64-28.7-64-64s28.7-64,64-64c35.3,0,64,28.7,64,64S547.3,352.2,512,352.2z"/>
+<polygon id="roots" class="st0" points="649,699.8 512,935.8 375,699.8 "/>
+</svg>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js" ></script>
- 	</head>
- 	<body>
- 		<h1>How to control the world!</h1>
-    <input id="ip" type="text" value="192.168.0.102:3000" /><input id="connect" type="button" value="Connect" /><br />
- 		<input id="light-on" type="button" value="Light On" />
-    <input id="light-off" type="button" value="Light Off" />
-    <input id="water-on" type="button" value="Water On" />
+  </div>
+  </div>
+  <div class="content-footer">
+  <a class="btn" href="./tomato/size"><span class="fas fa-tint"></span></a>
+  <a id="light" class="btn" href="#"><span class="fas fa-sun"></span></a>
+  <a class="btn" href="./tomato/yield"><span class="fas fa-thermometer-empty"></span></a>
+  </div>
+  </div>
+  <footer>
+      <a href="/views/recipes.html">Recipes</a>
+      <a href="/index" class="active">Garden</a>
+      <a href="info.html">Info</a>
+  </footer>
+  </div>
 
-    <script>
-    /* TODO: Read up on: */
-    // http://markdalgleish.com/2011/03/self-executing-anonymous-functions/
+  <script>
+    document.getElementById('light').onclick = function() {
+    this.classList.toggle('active');
+    document.getElementById('lightfade').classList.toggle('power');
+    barlist = document.getElementsByClassName('bars');
+    for (var i = 0; i < barlist.length; i++) {
+      barlist[i].classList.toggle('hidden')
+    }
+}
+  </script>
+  <script>
+  /* TODO: Read up on: */
+  // http://markdalgleish.com/2011/03/self-executing-anonymous-functions/
 
-    (function(window, document, undefined){
+  (function(window, document, undefined){
 
-      let socket = null
+    let socket = null
 
-      // get the UI elements
-      let connectButton = document.getElementById('connect')
-      let ipInput = document.getElementById('ip')
+    let port = ':3000'
 
-      connectButton.addEventListener('click', function(){
-        let ip = ipInput.value
-        socket = io(ip)
-      })
+    // get the UI elements
+    let connectButton = document.getElementById('connect')
+    let ipInput = document.getElementById('ip')
 
-      // actions
-      let lightOnButton = document.getElementById('light-on')
-      let lightOffButton = document.getElementById('light-off')
-      let waterOnButton = document.getElementById('water-on')
+    connectButton.addEventListener('click', function(){
+      let ip = ipInput.value + port
+      console.log(ip)
+      socket = io(ip)
+    })
 
-      lightOnButton.addEventListener('click', function(){
-        socket.emit('hardware', {type: 'light-on'});
-      })
+    // actions
+    let lightOnButton = document.getElementById('light-on')
+    let lightOffButton = document.getElementById('light-off')
+    let waterOnButton = document.getElementById('water-on')
 
-      lightOffButton.addEventListener('click', function(){
-        socket.emit('hardware', {type: 'light-off'});
-      })
+    lightOnButton.addEventListener('click', function(){
+      socket.emit('hardware', {type: 'light-on'});
+    })
 
-      waterOnButton.addEventListener('click', function(){
-        socket.emit('hardware', {type: 'water-on', duration: 10});
-      })
+    lightOffButton.addEventListener('click', function(){
+      socket.emit('hardware', {type: 'light-off'});
+    })
 
-    })(window, document);
+    waterOnButton.addEventListener('click', function(){
+      socket.emit('hardware', {type: 'water-on', duration: 10});
+    })
 
-    </script>
- 	</body>
- </html>
+  })(window, document);
+
+  </script>
+</body>
+</html>
