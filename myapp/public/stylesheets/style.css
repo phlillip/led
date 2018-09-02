@@ -451,6 +451,7 @@ body {
 .content-header{
   flex-direction: column;
   justify-content: space-around;
+  letter-spacing: 1ch;
 }
 .content-header div{
   display: flex;
@@ -469,11 +470,11 @@ body {
 .content-footer a{
   border: none;
 }
-.content-header input[type=text]{
-	width: 66.666%;
+.content-header a{
+	width: auto;
   background: transparent;
   border: 1px solid rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.75);
 }
 .content-footer a.active{
 	width: 33.333%;
