@@ -13,22 +13,8 @@
   <a href="menu"><span class="fas fa-bars"></span></a>
 </header>
   <div class="content">
-    <div class="content-header">
-      <div class="">
-        <!--<input id="ip" type="text" value="192.168.0" /> -->
-        <!--<input id="ip" type="text" value="192.168.0.24" /> HOME -->
-        <!--<input id="ip" type="text" value="86.159.150.200" /><!-- WORK machine FAILS -->
-        <input id="ip" type="text" value="192.168.1.71" /><!-- WORK machine FAILS -->
-        <!--<input id="ip" type="text" value="192.168.1.254" /><!-- WORK router FAILS -->
-        <!--<input id="ip" type="text" /><!-- left blank WORKS -->
-        <input id="connect" class="btn" type="button" value="Connect" />
-      </div>
-      <div class="">
-        <input id="light-on" class="btn" type="button" value="Light On" />
-        <input id="light-off" class="btn" type="button" value="Light Off" />
-        <input id="water-on" class="btn" type="button" value="Water On" />
-      </div>
-    </div>
+    <div id="shield"></div>
+    <!--<div class="content-header"></div>-->
 <div class="content-content">
   <div id="lightfade" class=""></div>
   <div class="bars bar1 hidden"></div>
@@ -47,9 +33,9 @@
   </div>
   </div>
   <div class="content-footer">
-  <a class="btn" href="./tomato/size"><span class="fas fa-tint"></span></a>
-  <a id="light" class="btn" href="#"><span class="fas fa-sun"></span></a>
-  <a class="btn" href="./tomato/yield"><span class="fas fa-thermometer-empty"></span></a>
+    <a id="connect" class="btn" href="#"><span id="connect-icon" class="fas fa-toggle-off"></span></a>
+    <a id="water-on" class="btn" href="#"><span class="fas fa-tint"></span></a>
+    <a id="light" class="btn" href="#"><span class="fas fa-sun"></span></a>
   </div>
   </div>
   <footer>
@@ -58,7 +44,7 @@
       <a href="info.html">Info</a>
   </footer>
   </div>
-  
+
   <script>
   /* TODO: Read up on: */
   // http://markdalgleish.com/2011/03/self-executing-anonymous-functions/
@@ -71,53 +57,58 @@
 
     // get the UI elements
     let connectButton = document.getElementById('connect')
-    let ipInput = document.getElementById('ip')
+    let connectIcon = document.getElementById('connect-icon')
 
+    //connect to plant
     connectButton.addEventListener('click', function(){
 
-      //get internal ip automatically:
-      //https://stackoverflow.com/questions/32837471/how-to-get-local-internal-ip-with-javascript
+      if (this.classList.contains('active') == true){
+        console.log('disconnecting...')
+        document.getElementById('shield').classList.toggle('hidden')
+        connectIcon.classList.replace("fa-toggle-on", "fa-toggle-off")
+        socket = null
+      }
+      else {
+        console.log('connecting...')
+        document.getElementById('shield').classList.toggle('hidden')
+        connectIcon.classList.replace("fa-toggle-off", "fa-toggle-on")
 
-      window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;   //compatibility for firefox and chrome
-      var pc = new RTCPeerConnection({iceServers:[]}), noop = function(){};
-      pc.createDataChannel("");    //create a bogus data channel
-      pc.createOffer(pc.setLocalDescription.bind(pc), noop);    // create offer and set local description
-      pc.onicecandidate = function(ice){  //listen for candidate events
-          if(!ice || !ice.candidate || !ice.candidate.candidate)  return;
-          var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
-          //console.log('my IP: ', myIP);
-          pc.onicecandidate = noop;
+        //get internal ip automatically:
+        //https://stackoverflow.com/questions/32837471/how-to-get-local-internal-ip-with-javascript
 
-          let ip = myIP + port
-          console.log(ip)
-          socket = io(ip)
+        window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;   //compatibility for firefox and chrome
+        var pc = new RTCPeerConnection({iceServers:[]}), noop = function(){};
+        pc.createDataChannel("");    //create a bogus data channel
+        pc.createOffer(pc.setLocalDescription.bind(pc), noop);    // create offer and set local description
+        pc.onicecandidate = function(ice){  //listen for candidate events
 
-          //let ip = ipInput.value + port
-          //console.log(ip)
-          //socket = io(ip)
+            if(!ice || !ice.candidate || !ice.candidate.candidate)  return;
+            var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+            //console.log('my IP: ', myIP);
+            pc.onicecandidate = noop;
 
-      };
+            let ip = myIP + port
+            console.log(ip)
+            socket = io(ip)
+
+        };
+
+      }
+      this.classList.toggle('active');
 
     })
 
-    // actions
-    //let lightOnButton = document.getElementById('light-on')
-    let lightOffButton = document.getElementById('light-off')
+    // water plant
     let waterOnButton = document.getElementById('water-on')
-
-    //lightOnButton.addEventListener('click', function(){
-    //  socket.emit('hardware', {type: 'light-on'});
-    //})
-
-    //lightOffButton.addEventListener('click', function(){
-    //  socket.emit('hardware', {type: 'light-off'});
-    //})
 
     waterOnButton.addEventListener('click', function(){
       socket.emit('hardware', {type: 'water-on', duration: 10});
     })
 
-    document.getElementById('light').onclick = function() {
+    let lightButton = document.getElementById('light')
+
+    //light plant
+    lightButton.onclick = function() {
       if (this.classList.contains('active') == true){
         console.log('turning off')
         socket.emit('hardware', {type: 'light-off'});

@@ -383,10 +383,19 @@ body {
   margin: 1em;
   border-radius: .25em;
 }
+#shield{
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 1001;
+}
 .content-header,
 .content-footer{
 	flex: 0 0 auto;
-	z-index: 100;
+	z-index: 1002;
 	background: black;
 }
 .content-content{
