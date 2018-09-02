@@ -58,17 +58,7 @@
       <a href="info.html">Info</a>
   </footer>
   </div>
-
-  <script>
-    document.getElementById('light').onclick = function() {
-    this.classList.toggle('active');
-    document.getElementById('lightfade').classList.toggle('power');
-    barlist = document.getElementsByClassName('bars');
-    for (var i = 0; i < barlist.length; i++) {
-      barlist[i].classList.toggle('hidden')
-    }
-}
-  </script>
+  
   <script>
   /* TODO: Read up on: */
   // http://markdalgleish.com/2011/03/self-executing-anonymous-functions/
@@ -85,7 +75,8 @@
 
     connectButton.addEventListener('click', function(){
 
-      //get internal ip automatically
+      //get internal ip automatically:
+      //https://stackoverflow.com/questions/32837471/how-to-get-local-internal-ip-with-javascript
 
       window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;   //compatibility for firefox and chrome
       var pc = new RTCPeerConnection({iceServers:[]}), noop = function(){};
@@ -110,21 +101,38 @@
     })
 
     // actions
-    let lightOnButton = document.getElementById('light-on')
+    //let lightOnButton = document.getElementById('light-on')
     let lightOffButton = document.getElementById('light-off')
     let waterOnButton = document.getElementById('water-on')
 
-    lightOnButton.addEventListener('click', function(){
-      socket.emit('hardware', {type: 'light-on'});
-    })
+    //lightOnButton.addEventListener('click', function(){
+    //  socket.emit('hardware', {type: 'light-on'});
+    //})
 
-    lightOffButton.addEventListener('click', function(){
-      socket.emit('hardware', {type: 'light-off'});
-    })
+    //lightOffButton.addEventListener('click', function(){
+    //  socket.emit('hardware', {type: 'light-off'});
+    //})
 
     waterOnButton.addEventListener('click', function(){
       socket.emit('hardware', {type: 'water-on', duration: 10});
     })
+
+    document.getElementById('light').onclick = function() {
+      if (this.classList.contains('active') == true){
+        console.log('turning off')
+        socket.emit('hardware', {type: 'light-off'});
+      }
+      else{
+        console.log('turning on')
+        socket.emit('hardware', {type: 'light-on'});
+      }
+    this.classList.toggle('active');
+    document.getElementById('lightfade').classList.toggle('power');
+    barlist = document.getElementsByClassName('bars');
+    for (var i = 0; i < barlist.length; i++) {
+      barlist[i].classList.toggle('hidden')
+    }
+}
 
   })(window, document);
 
