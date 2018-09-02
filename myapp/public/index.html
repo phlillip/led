@@ -13,7 +13,14 @@
   <a href="menu"><span class="fas fa-bars"></span></a>
 </header>
   <div class="content">
-    <div id="shield"></div>
+    <div id="shield">
+      <div id="modal" class="hidden">
+        <div class="close fas fa-times-circle"></div>
+        <div class="message">
+        </div>
+      </div>
+    </div>
+
     <!--<div class="content-header"></div>-->
 <div class="content-content">
   <div id="lightfade" class=""></div>
@@ -102,13 +109,40 @@
     let waterOnButton = document.getElementById('water-on')
 
     waterOnButton.addEventListener('click', function(){
-      socket.emit('hardware', {type: 'water-on', duration: 10});
+      if(connectButton.classList.contains('active') == false){
+        let modalMessage = document.querySelector(".message");
+        modalMessage.innerHTML = "plant not connected"
+        modalWindow.classList.toggle('hidden')
+
+      }
+      if (this.classList.contains('active') == true){
+        console.log('turning off')
+        socket.emit('hardware', {type: 'water-off', duration: 0});
+      }
+      else{
+        console.log('turning on')
+        socket.emit('hardware', {type: 'water-on', duration: 10});
+      }
+    this.classList.toggle('active');
     })
 
     let lightButton = document.getElementById('light')
+    let modalWindow = document.getElementById('modal')
+    let modalClose = document.querySelector(".close");
+
+    //close modal
+    modalClose.onclick = function() {
+      modalWindow.classList.toggle('hidden')
+    }
 
     //light plant
     lightButton.onclick = function() {
+      if(connectButton.classList.contains('active') == false){
+        let modalMessage = document.querySelector(".message");
+        modalMessage.innerHTML = "plant not connected"
+        modalWindow.classList.toggle('hidden')
+
+      }
       if (this.classList.contains('active') == true){
         console.log('turning off')
         socket.emit('hardware', {type: 'light-off'});
