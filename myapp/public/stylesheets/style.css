@@ -452,6 +452,7 @@ body {
   flex-direction: column;
   justify-content: space-around;
   letter-spacing: 1ch;
+  color: rgba(255,255,255,.25);
 }
 .content-header div{
   display: flex;
@@ -533,6 +534,44 @@ label{display: block;}
 .plant{
 	mix-blend-mode: screen;
 	z-index: 1000;
+}
+.recipe-list{
+  color: rgba(255,255,255,1);
+  padding: 1em;
+  overflow-y: scroll;
+}
+.breadcrumbs{
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: .75em;
+  margin-bottom: 1em;
+}
+.recipe{
+  text-align: left;
+  background: white;
+  color: rgba(0,0,0,0.9);
+  border-radius: .25em;
+  position: relative;
+  margin-bottom: 1em;
+  padding: 1em;
+}
+.recipe-info{
+  display: inline-block;
+}
+.recipe-name,
+.recipe-tags{
+  display: block;
+}
+.recipe-tags{
+  font-size: .75em;
+}
+.recipe-switch{
+  font-size: 2em;
+  float: right;
+}
+.recipe-switch.active{
+  color: #3dc895;
 }
 
 #plant #head,
