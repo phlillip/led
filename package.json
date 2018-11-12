@@ -20,11 +20,9 @@
     "hoodie": "^28.2.6",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
-    "johnny-five": "^0.15.0",
     "morgan": "^1.9.1",
     "normalize.css": "^8.0.0",
     "pubnub": "^4.21.2",
-    "robotjs": "^0.5.1",
     "shortid": "^2.2.12",
     "socket.io": "^2.1.1"
   },
