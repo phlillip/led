@@ -1,0 +1,184 @@
+<html>
+<head>
+  <title>PlantNation</title>
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <link href="/stylesheets/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js" ></script>
+</head>
+<body>
+  <div class="page status">
+  <header>
+    <span><img src="/images/ruuts.svg" /> | PlantStatus</span>
+  <a href="menu"><span class="fas fa-bars"></span></a>
+</header>
+  <div class="content">
+
+   <div class="content-header">
+     <a class="btn">RECIPES</a>
+   </div>
+<div class="content-content">
+  <div class="recipe-list">
+    <span class="breadcrumbs">Salad | Tomato | Piccolino</span>
+    <div class="recipe collapsed">
+      <div class="recipe-info">
+      <span class="recipe-name">Rainbow Return</span>
+      <span class="recipe-tags">colour | yield</span>
+      </div>
+      <span class="recipe-switch fas fa-toggle-off"></span>
+    </div>
+    <div class="recipe collapsed">
+      <div class="recipe-info">
+      <span class="recipe-name">< Titanic ||| Toms ></span>
+      <span class="recipe-tags">size</span>
+      </div>
+      <span class="recipe-switch fas fa-toggle-off"></span>
+    </div>
+    <div class="recipe collapsed">
+      <div class="recipe-info">
+      <span class="recipe-name">Snappy Salad</span>
+      <span class="recipe-tags">yield | speed</span>
+      </div>
+      <span class="recipe-switch active fas fa-toggle-on"></span>
+    </div>
+    <div class="recipe collapsed">
+      <div class="recipe-info">
+      <span class="recipe-name">T8ngyT0ms</span>
+      <span class="recipe-tags">size | colour</span>
+      </div>
+      <span class="recipe-switch fas fa-toggle-off"></span>
+    </div>
+    <div class="recipe collapsed">
+      <div class="recipe-info">
+      <span class="recipe-name">BiggggBrites</span>
+      <span class="recipe-tags">colour | size</span>
+      </div>
+      <span class="recipe-switch fas fa-toggle-off"></span>
+    </div>
+  </div>
+  </div>
+  <div class="content-footer">
+    <a id="connect" class="btn" href="#"><span id="connect-icon" class="fas fa-toggle-off"></span></a>
+    <a id="water-on" class="btn" href="#"><span class="fas fa-tint"></span></a>
+    <a id="light" class="btn" href="#"><span class="fas fa-sun"></span></a>
+  </div>
+  </div>
+  <footer>
+      <a href="recipes.html" class="active">Recipes</a>
+      <a href="index.html">Garden</a>
+      <a href="info.html">Info</a>
+  </footer>
+  </div>
+
+  <script>
+  /* TODO: Read up on: */
+  // http://markdalgleish.com/2011/03/self-executing-anonymous-functions/
+
+  (function(window, document, undefined){
+
+    let socket = null
+
+    let port = ':3000'
+
+    // get the UI elements
+    let connectButton = document.getElementById('connect')
+    let connectIcon = document.getElementById('connect-icon')
+
+    //connect to plant
+    connectButton.addEventListener('click', function(){
+
+      if (this.classList.contains('active') == true){
+        console.log('disconnecting...')
+        document.getElementById('shield').classList.toggle('hidden')
+        connectIcon.classList.replace("fa-toggle-on", "fa-toggle-off")
+        socket = null
+      }
+      else {
+        console.log('connecting...')
+        document.getElementById('shield').classList.toggle('hidden')
+        connectIcon.classList.replace("fa-toggle-off", "fa-toggle-on")
+
+        //get internal ip automatically:
+        //https://stackoverflow.com/questions/32837471/how-to-get-local-internal-ip-with-javascript
+
+        window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;   //compatibility for firefox and chrome
+        var pc = new RTCPeerConnection({iceServers:[]}), noop = function(){};
+        pc.createDataChannel("");    //create a bogus data channel
+        pc.createOffer(pc.setLocalDescription.bind(pc), noop);    // create offer and set local description
+        pc.onicecandidate = function(ice){  //listen for candidate events
+
+            if(!ice || !ice.candidate || !ice.candidate.candidate)  return;
+            var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+            //console.log('my IP: ', myIP);
+            pc.onicecandidate = noop;
+
+            let ip = myIP + port
+            console.log(ip)
+            socket = io(ip)
+
+        };
+
+      }
+      this.classList.toggle('active');
+
+    })
+
+    // water plant
+    let waterOnButton = document.getElementById('water-on')
+
+    waterOnButton.addEventListener('click', function(){
+      if(connectButton.classList.contains('active') == false){
+        let modalMessage = document.querySelector(".message");
+        modalMessage.innerHTML = "plant not connected"
+        modalWindow.classList.toggle('hidden')
+
+      }
+      if (this.classList.contains('active') == true){
+        console.log('turning off')
+        socket.emit('hardware', {type: 'water-off', duration: 0});
+      }
+      else{
+        console.log('turning on')
+        socket.emit('hardware', {type: 'water-on', duration: 10});
+      }
+    this.classList.toggle('active');
+    })
+
+    let lightButton = document.getElementById('light')
+    let modalWindow = document.getElementById('modal')
+    let modalClose = document.querySelector(".close");
+
+    //close modal
+    modalClose.onclick = function() {
+      modalWindow.classList.toggle('hidden')
+    }
+
+    //light plant
+    lightButton.onclick = function() {
+      if(connectButton.classList.contains('active') == false){
+        let modalMessage = document.querySelector(".message");
+        modalMessage.innerHTML = "plant not connected"
+        modalWindow.classList.toggle('hidden')
+
+      }
+      if (this.classList.contains('active') == true){
+        console.log('turning off')
+        socket.emit('hardware', {type: 'light-off'});
+      }
+      else{
+        console.log('turning on')
+        socket.emit('hardware', {type: 'light-on'});
+      }
+    this.classList.toggle('active');
+    document.getElementById('lightfade').classList.toggle('power');
+    barlist = document.getElementsByClassName('bars');
+    for (var i = 0; i < barlist.length; i++) {
+      barlist[i].classList.toggle('hidden')
+    }
+}
+
+  })(window, document);
+
+  </script>
+</body>
+</html>
