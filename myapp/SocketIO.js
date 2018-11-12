@@ -4,7 +4,7 @@
  * @Last modified by:   alcwynparker
  * @Last modified time: 2018-04-30T23:47:27+01:00
  */
-const io = require('socket.io')(process.env.PORT || 3000)
+const io = require('socket.io')(process.env.PORT || 5000)
 const shortid = require('shortid')
 const robot = require("robotjs")
 const os = require('os')
