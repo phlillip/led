@@ -9,24 +9,23 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "express": "~4.16.0",
-    "firebase": "^5.3.1",
-    "firebase-admin": "^5.13.1",
+    "cookie-parser": "~1.4.6",
+    "debug": "~4.3.4",
+    "express": "~4.18.2",
+    "firebase": "^10.2.0",
+    "firebase-admin": "^11.10.1",
     "firebase-messaging": "^1.0.6",
-    "googleapis": "^32.0.0",
-    "http-errors": "~1.6.2",
-    "jade": "~1.11.0",
-    "morgan": "^1.9.1",
-    "normalize.css": "^8.0.0",
-    "pubnub": "^4.21.2",
+    "googleapis": "^126.0.0",
+    "http-errors": "~2.0.0",
+    "jade": "^0.31.2",
+    "morgan": "^1.10.0",
+    "normalize.css": "^8.0.1",
+    "pubnub": "^7.3.0",
     "shortid": "^2.2.12",
-    "socket.io": "^2.1.1"
+    "socket.io": "^4.7.2"
   },
   "description": "led prototype",
   "main": "app.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/phlillip/led.git"
